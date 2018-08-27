@@ -6,6 +6,30 @@
     <title>Recipes page</title>
 </head>
 <body>
-    <h1 th:text="'Index page!!!'">This is my index page!</h1>
+    <div th:each="recipe : ${recipes}">
+        <p th:text="${recipe.description}">Description goes here</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Prep time </th>
+                    <th>Servings </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${recipe.prepTime}">Prep time</td>
+                    <td th:text="${recipe.servings}">Number of servings</td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:text="${recipe.directions}">Directions</p>
+        <p th:text="${recipe.difficulty}">Difficulty</p>
+        <div th:each="category : ${recipe.categories}">
+            <p th:text="${category.description}">Category's name</p>
+        </div>
+        <div th:each="ingredient : ${recipe.ingredients}">
+            <p th:text="${ingredient.amount} + ' ' + ${ingredient.uom.description} + ' ' + ${ingredient.description}"></p>
+        </div>
+    </div>
 </body>
 </html>

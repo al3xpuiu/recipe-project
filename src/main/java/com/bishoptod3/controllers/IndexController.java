@@ -1,6 +1,9 @@
 package com.bishoptod3.controllers;
 
+import com.bishoptod3.services.RecipeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -9,9 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+    private RecipeService recipeService;
+
+    @Autowired
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
+
     @RequestMapping({"/", "", "/index"})
-    public String getIndexPage() {
-        System.out.println("Just a msg..123");
+    public String getIndexPage(Model model) {
+
+        model.addAttribute( "recipes", recipeService.getRecipes() );
+
         return "index";
     }
 }
