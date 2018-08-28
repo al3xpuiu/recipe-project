@@ -76,7 +76,6 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
         //Notes -start
         Notes notes = new Notes();
-        notes.setRecipe( perfectGuacamole );
         notes.setRecipeNotes( "All you really need to make guacamole is ripe avocados and salt. After that, a little lime or lemon juice—a splash of acidity—will help to balance the richness of the avocado. Then if you want, add chopped cilantro, chiles, onion, and/or tomato.\n" +
                 "\n" +
                 "Once you have basic guacamole down, feel free to experiment with variations including strawberries, peaches, pineapple, mangoes, even watermelon. You can get creative with homemade guacamole!\n" +
@@ -89,25 +88,20 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         //Notes -end
 
         //Ingredients -start
-        Ingredient ingredient = new Ingredient("ripe avocados", new BigDecimal(2), perfectGuacamole, each);
-        ingredient.setRecipe( perfectGuacamole );
-        perfectGuacamole.getIngredients().add( ingredient );
+        Ingredient ingredient = new Ingredient("ripe avocados", new BigDecimal(2), each);
+        perfectGuacamole.addIngredient( ingredient );
 
-        ingredient = new Ingredient("Kosher salt", new BigDecimal( 1/2 ), perfectGuacamole, teaspoon);
-        ingredient.setRecipe( perfectGuacamole );
-        perfectGuacamole.getIngredients().add( ingredient );
+        ingredient = new Ingredient("Kosher salt", new BigDecimal( 1/2 ), teaspoon);
+        perfectGuacamole.addIngredient( ingredient );
 
-        ingredient = new Ingredient("fresh lime juice or lemon juice", new BigDecimal( 1 ), perfectGuacamole, tablespoon);
-        ingredient.setRecipe( perfectGuacamole );
-        perfectGuacamole.getIngredients().add( ingredient );
+        ingredient = new Ingredient("fresh lime juice or lemon juice", new BigDecimal( 1 ), tablespoon);
+        perfectGuacamole.addIngredient( ingredient );
 
-        ingredient = new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal( 2 ), perfectGuacamole, tablespoon);
-        ingredient.setRecipe( perfectGuacamole );
-        perfectGuacamole.getIngredients().add( ingredient );
+        ingredient = new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal( 2 ), tablespoon);
+        perfectGuacamole.addIngredient( ingredient );
 
-        ingredient = new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal( 2 ), perfectGuacamole, each);
-        ingredient.setRecipe( perfectGuacamole );
-        perfectGuacamole.getIngredients().add( ingredient );
+        ingredient = new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal( 2 ), each);
+        perfectGuacamole.addIngredient( ingredient );
         //Ingredients - end
 
         //Categories - start
