@@ -4,6 +4,7 @@ import com.bishoptod3.domain.*;
 import com.bishoptod3.repositories.CategoryRepository;
 import com.bishoptod3.repositories.RecipeRepository;
 import com.bishoptod3.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 /**
  * Created by Loky on 27/08/2018.
  */
+@Slf4j
 @Component
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -40,6 +42,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         Category italian = categoryRepository.findByDescription( "Italian" ).orElseThrow( IllegalArgumentException::new );
         Category mexican = categoryRepository.findByDescription( "Mexican" ).orElseThrow( IllegalArgumentException::new );
         Category fastFood = categoryRepository.findByDescription( "Fast Food" ).orElseThrow( IllegalArgumentException::new );
+        log.debug( "Finished the categories in bootstrap" );
         //Categories - end
 
 
@@ -50,6 +53,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         UnitOfMeasure pinch = unitOfMeasureRepository.findByDescription( "Pinch" ).orElseThrow( IllegalArgumentException::new );
         UnitOfMeasure ounce = unitOfMeasureRepository.findByDescription( "Ounce" ).orElseThrow( IllegalArgumentException::new );
         UnitOfMeasure each = unitOfMeasureRepository.findByDescription( "Each" ).orElseThrow( IllegalArgumentException::new );
+        log.debug( "Finished the units of measure in bootstrap" );
         //Units of measure - end
 
         Recipe perfectGuacamole = new Recipe();
@@ -112,6 +116,8 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         perfectGuacamole.setDifficulty( Difficulty.EASY );
 
         recipeRepository.save( perfectGuacamole );
+
+        log.debug( "I'm at the end of the bootstrap class" );
 
     }
 }
