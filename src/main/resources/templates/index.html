@@ -4,31 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipes page</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
 </head>
 <body>
-    <div th:each="recipe : ${recipes}">
-        <p th:text="${recipe.description}">Description goes here</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Prep time </th>
-                    <th>Servings </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td th:text="${recipe.prepTime}">Prep time</td>
-                    <td th:text="${recipe.servings}">Number of servings</td>
-                </tr>
-            </tbody>
-        </table>
-        <p th:text="${recipe.directions}">Directions</p>
-        <p th:text="${recipe.difficulty}">Difficulty</p>
-        <div th:each="category : ${recipe.categories}">
-            <p th:text="${category.description}">Category's name</p>
-        </div>
-        <div th:each="ingredient : ${recipe.ingredients}">
-            <p th:text="${ingredient.amount} + ' ' + ${ingredient.uom.description} + ' ' + ${ingredient.description}"></p>
+    <div class="container-fluid" style="margin-top: 20px">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-primary">
+
+                    <div class="panel-heading">
+                        <h1 class="panel-title">My Recipes</h1>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                            <table class="table table-hover">
+                                <thead class="thead-inverse">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:remove="all">
+                                        <td th:text="6">6</td>
+                                        <td th:text="'Very tasty recipe!'">Very tasty recipe! 6</td>
+                                    </tr>
+                                    <tr th:remove="all">
+                                        <td th:text="7">7</td>
+                                        <td th:text="'Very tasty recipe!'">Very tasty recipe! 7</td>
+                                    </tr>
+                                    <tr th:each="recipe : ${recipes}">
+                                        <td th:text="${recipe.id}">8</td>
+                                        <td th:text="${recipe.description}">Very tasty recipe! 8</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
