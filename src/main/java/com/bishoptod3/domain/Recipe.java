@@ -1,6 +1,9 @@
 package com.bishoptod3.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,6 +12,9 @@ import java.util.Set;
 /**
  * Created by Loky on 22/08/2018.
  */
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 public class Recipe {
