@@ -16,6 +16,7 @@ public class CategoryTest {
     public void setUp() {
         category = new Category();
     }
+
     @Test
     public void getId() throws Exception {
         Long idValue = 4L;
