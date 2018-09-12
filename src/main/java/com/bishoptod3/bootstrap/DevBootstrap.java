@@ -59,9 +59,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         //Units of measure - end
 
         Recipe perfectGuacamole = new Recipe();
-        perfectGuacamole.setDescription( "The BEST guacamole! So easy to make with ripe avocados, salt, " +
-                "serrano chiles, cilantro and lime. Garnish with red radishes or jicama. Serve with tortilla" +
-                " chips. Watch how to make guacamole - it's easy!" );
+        perfectGuacamole.setDescription( "The BEST guacamole!" );
         perfectGuacamole.setPrepTime( 10 );
         perfectGuacamole.setCookTime( 0 );
         perfectGuacamole.setServings( 4 );
