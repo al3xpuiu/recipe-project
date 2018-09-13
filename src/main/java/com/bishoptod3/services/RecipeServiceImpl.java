@@ -31,5 +31,11 @@ public class RecipeServiceImpl implements RecipeService {
         return recipes;
     }
 
+    @Override
+    public Recipe findById(Long id) {
+        Recipe recipe = recipeRepository.findById( id ).orElse( null );
+        if (recipe == null) throw new IllegalArgumentException( "There is no recipe with id: " + id );
 
+        return recipe;
+    }
 }

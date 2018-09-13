@@ -64,7 +64,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         perfectGuacamole.setCookTime( 0 );
         perfectGuacamole.setServings( 4 );
         perfectGuacamole.setSource( "www.simplyrecipes.com" );
-        perfectGuacamole.setUrl( "https://www.simplyrecipes.com/recipes/perfect_guacamole/" );
+        perfectGuacamole.setUrl( "https://www.simplyrecipes.com/" );
         perfectGuacamole.setDirections( "1 Cut avocado, remove flesh: Cut the avocados in half. Remove seed." +
                 " Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon." +
                 " (See How to Cut and Peel an Avocado.) Place in a bowl.\n 2 Mash with a fork: Using a fork, roughly mash the avocado. " +

@@ -5,12 +5,15 @@ import com.bishoptod3.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -31,7 +34,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void getRecipes() throws Exception {
+    public void getRecipesTest() throws Exception {
 
         Recipe recipe = new Recipe();
         Set<Recipe> recipeData = new HashSet<>(  );
@@ -43,6 +46,25 @@ public class RecipeServiceImplTest {
         assertEquals( recipeSet.size(), 1 );
 
         verify( recipeRepository, times( 1 ) ).findAll();
+    }
+
+    @Test
+    public void findByIdTest() {
+
+        Long id = 1L;
+        Recipe recipe = new Recipe(  );
+        recipe.setId( id );
+
+        Optional<Recipe> recipeOptional = Optional.of( recipe );
+        Mockito.when( recipeRepository.findById( id )).thenReturn( recipeOptional );
+
+        Recipe recipeReturned = recipeService.findById( id );
+
+        assertNotNull( recipeReturned );
+        Mockito.verify( recipeRepository, Mockito.times( 1 ) ).findById( Mockito.anyLong() );
+        Mockito.verify( recipeRepository, Mockito.never() ).findAll();
+
+
     }
 
 }

@@ -35,20 +35,25 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Description</th>
+                                        <th>View</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:remove="all">
                                         <td th:text="6">6</td>
                                         <td th:text="'Very tasty recipe!'">Very tasty recipe! 6</td>
+                                        <td><a href="#">View</a></td>
                                     </tr>
                                     <tr th:remove="all">
                                         <td th:text="7">7</td>
                                         <td th:text="'Very tasty recipe!'">Very tasty recipe! 7</td>
+                                        <td><a href="#">View</a></td>
                                     </tr>
                                     <tr th:each="recipe : ${recipes}">
+                                        <!--/*@thymesVar id="recipe" type="com.bishoptod3.domain.Recipe"*/-->
                                         <td th:text="${recipe.id}">8</td>
                                         <td th:text="${recipe.description}">Very tasty recipe! 8</td>
+                                        <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
                                     </tr>
                                 </tbody>
                             </table>
