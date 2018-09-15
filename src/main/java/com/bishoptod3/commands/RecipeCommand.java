@@ -1,9 +1,6 @@
 package com.bishoptod3.commands;
 
-import com.bishoptod3.domain.Category;
 import com.bishoptod3.domain.Difficulty;
-import com.bishoptod3.domain.Ingredient;
-import com.bishoptod3.domain.Notes;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,10 +24,10 @@ public class RecipeCommand {
     private String source;
     private String url;
     private String directions;
-    private Set<Ingredient> ingredients = new HashSet<>(  );
+    private Set<IngredientCommand> ingredients = new HashSet<>(  );
     private Byte[] image;
-    private Notes notes;
+    private NotesCommand notes;
     private Difficulty difficulty;
-    private Set<Category> categories = new HashSet<>(  );
+    private Set<CategoryCommand> categories = new HashSet<>(  );
 
 }

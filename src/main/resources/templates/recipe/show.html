@@ -25,7 +25,7 @@
             <div class="pannel-group">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title" th:text="${recipe.recipeNotes}">Recipe Description Here!</h1>
+                        <h1 class="panel-title" th:text="${recipe.description}">Recipe Description Here!</h1>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -37,7 +37,7 @@
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
                                     <li th:remove="all">cat three</li>
-                                    <li th:each="category : ${recipe.categories}" th:text="${category.recipeNotes}"></li>
+                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}"></li>
                                 </ul>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
                                     <li th:remove="all">1 Teaspoon of chocolate</li>
                                     <li th:remove="all">1 Teaspoon of Sugar</li>
                                     <li th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient.amount} +
-                                    ' ' + ${ingredient.uom.recipeNotes} + ' ' + ${ingredient.recipeNotes}">2 Teaspoon of Something</li>
+                                    ' ' + ${ingredient.uom.description} + ' ' + ${ingredient.description}">2 Teaspoon of Something</li>
                                 </ul>
                             </div>
                         </div>

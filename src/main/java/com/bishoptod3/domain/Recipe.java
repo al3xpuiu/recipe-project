@@ -53,11 +53,13 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
-        notes.setRecipe( this );
+        if (notes != null)
+            notes.setRecipe( this );
     }
 
     public void addIngredient(Ingredient ingredient) {
         this.ingredients.add( ingredient );
-        ingredient.setRecipe( this );
+        if (ingredient != null)
+            ingredient.setRecipe( this );
     }
 }

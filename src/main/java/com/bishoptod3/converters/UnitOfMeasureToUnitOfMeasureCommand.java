@@ -16,7 +16,15 @@ public class UnitOfMeasureToUnitOfMeasureCommand implements Converter<UnitOfMeas
     @Synchronized
     @Nullable
     @Override
-    public UnitOfMeasureCommand convert(UnitOfMeasure source) {
-        return null;
+    public UnitOfMeasureCommand convert(@Nullable UnitOfMeasure source) {
+
+        if (source == null)
+            return null;
+
+        final UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+        unitOfMeasureCommand.setId(source.getId());
+        unitOfMeasureCommand.setDescription(source.getDescription());
+
+        return unitOfMeasureCommand;
     }
 }
