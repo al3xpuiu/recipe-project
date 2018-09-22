@@ -1,5 +1,6 @@
 package com.bishoptod3.services;
 
+import com.bishoptod3.commands.RecipeCommand;
 import com.bishoptod3.domain.Recipe;
 
 import java.util.Set;
@@ -12,4 +13,6 @@ public interface RecipeService {
     Set<Recipe> getRecipes();
 
     Recipe findById(Long id);
+
+    RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
 }

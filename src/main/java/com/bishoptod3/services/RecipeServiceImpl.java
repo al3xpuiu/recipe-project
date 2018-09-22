@@ -1,5 +1,8 @@
 package com.bishoptod3.services;
 
+import com.bishoptod3.commands.RecipeCommand;
+import com.bishoptod3.converters.RecipeCommandToRecipe;
+import com.bishoptod3.converters.RecipeToRecipeCommand;
 import com.bishoptod3.domain.Recipe;
 import com.bishoptod3.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +20,14 @@ import java.util.Set;
 public class RecipeServiceImpl implements RecipeService {
 
     private RecipeRepository recipeRepository;
+    private RecipeToRecipeCommand recipeToRecipeCommand;
+    private RecipeCommandToRecipe recipeCommandToRecipe;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeToRecipeCommand recipeToRecipeCommand, RecipeCommandToRecipe recipeCommandToRecipe) {
         this.recipeRepository = recipeRepository;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
     }
 
     @Override
@@ -37,5 +44,23 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipe == null) throw new IllegalArgumentException( "There is no recipe with id: " + id );
 
         return recipe;
+    }
+
+    @Override
+    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
+
+        Recipe savedRecipe = null;
+        if (detachedRecipe != null)
+            savedRecipe = recipeRepository.save(detachedRecipe);
+
+
+        if (savedRecipe != null) {
+            log.debug("Saved recipe " + savedRecipe.getId());
+        } else {
+            log.debug("Recipe was null. Couldn't save recipeCommand.");
+        }
+
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 }

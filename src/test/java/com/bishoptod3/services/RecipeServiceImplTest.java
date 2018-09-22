@@ -1,5 +1,7 @@
 package com.bishoptod3.services;
 
+import com.bishoptod3.converters.RecipeCommandToRecipe;
+import com.bishoptod3.converters.RecipeToRecipeCommand;
 import com.bishoptod3.domain.Recipe;
 import com.bishoptod3.repositories.RecipeRepository;
 import org.junit.Before;
@@ -26,11 +28,17 @@ public class RecipeServiceImplTest {
     @Mock
     private RecipeRepository recipeRepository;
 
+    @Mock
+    private RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    private RecipeCommandToRecipe recipeCommandToRecipe;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
 
-        recipeService = new RecipeServiceImpl( recipeRepository );
+        recipeService = new RecipeServiceImpl( recipeRepository, recipeToRecipeCommand, recipeCommandToRecipe);
     }
 
     @Test
