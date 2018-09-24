@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Loky on 13/09/2018.
  */
@@ -18,6 +20,7 @@ public class IngredientToIngredientCommandTest {
 
     private static final Long ID_INGREDIENT = 1L;
     private static final String DESCRIPTION_INGREDIENT = "Some description";
+    private static final BigDecimal AMOUNT_INGREDIENT = BigDecimal.ONE;
     private static final Long ID_UNIT_OF_MEASURE = 2L;
     private static final String DESCRIPTION_UNIT_OF_MEASURE = "Another description";
 
@@ -49,6 +52,7 @@ public class IngredientToIngredientCommandTest {
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_INGREDIENT);
         ingredient.setDescription(DESCRIPTION_INGREDIENT);
+        ingredient.setAmount(AMOUNT_INGREDIENT);
         ingredient.setUom(unitOfMeasure);
 
         //when
@@ -58,6 +62,7 @@ public class IngredientToIngredientCommandTest {
         Assert.assertNotNull(ingredientCommand);
         Assert.assertEquals(ID_INGREDIENT, ingredient.getId());
         Assert.assertEquals(DESCRIPTION_INGREDIENT, ingredient.getDescription());
+        Assert.assertEquals(AMOUNT_INGREDIENT, ingredient.getAmount());
         Assert.assertEquals(ID_UNIT_OF_MEASURE, ingredient.getUom().getId());
         Assert.assertEquals(DESCRIPTION_UNIT_OF_MEASURE, ingredient.getUom().getDescription());
 

@@ -8,6 +8,7 @@ import com.bishoptod3.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +48,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
         Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
 
@@ -62,5 +64,15 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         return recipeToRecipeCommand.convert(savedRecipe);
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand findCommandById(Long id) {
+
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe == null) throw new IllegalArgumentException("There is not recipe with the id " + id);
+
+        return recipeToRecipeCommand.convert(recipe);
     }
 }
