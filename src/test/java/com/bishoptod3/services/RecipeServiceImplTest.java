@@ -75,4 +75,17 @@ public class RecipeServiceImplTest {
 
     }
 
+    @Test
+    public void testDeleteById() throws Exception {
+
+        //given
+        Long idToDelete = 1L;
+
+        //when
+        recipeService.deleteById(idToDelete);
+
+        //then
+        Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+    }
+
 }

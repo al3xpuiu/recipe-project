@@ -75,4 +75,12 @@ public class RecipeServiceImpl implements RecipeService {
 
         return recipeToRecipeCommand.convert(recipe);
     }
+
+    @Override
+    public void deleteById(Long id) {
+
+        if (id == null) throw new IllegalArgumentException("Id can't be null");
+        recipeRepository.deleteById(id);
+
+    }
 }
