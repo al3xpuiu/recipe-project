@@ -1,6 +1,6 @@
 package com.bishoptod3.controllers;
 
-import com.bishoptod3.services.RecipeService;
+import com.bishoptod3.services.IngredientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IngredientController {
 
-    private RecipeService recipeService;
+    private IngredientService ingredientService;
 
     @Autowired
-    public IngredientController(RecipeService recipeService) {
-        this.recipeService = recipeService;
+    public IngredientController(IngredientService ingredientService) {
+        this.ingredientService = ingredientService;
     }
 
     @GetMapping
@@ -29,8 +29,7 @@ public class IngredientController {
 
         log.debug("Getting ingredient list for recipe id: " + id);
 
-        // use command object to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
+        model.addAttribute("ingredients", ingredientService.getIngredientsByRecipeId(Long.valueOf(id)));
 
         return "recipe/ingredient/list";
     }

@@ -19,7 +19,7 @@
 
 </head>
 <body>
-<!--/*@thymesVar id="recipe" type="com.bishoptod3.domain.Recipe"*/-->
+<!--/*@thymesVar id="recipe" type="com.bishoptod3.domain.Ingredient"*/-->
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="panel-body">
-                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipe.ingredients)}">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(ingredients)}">
                         <table class="table table-hover">
                             <thead class="thead-inverse">
                             <tr>
@@ -56,13 +56,12 @@
                                 <td><a href="#">Update</a></td>
                                 <td><a href="#">Delete</a></td>
                             </tr>
-                            <tr th:each="ingredient : ${recipe.ingredients}">
-                                <!--/*@thymesVar id="recipe" type="com.bishoptod3.domain.Ingredient"*/-->
+                            <tr th:each="ingredient : ${ingredients}">
                                 <td th:text="${ingredient.id}">8</td>
                                 <td th:text="${ingredient.description}">Ingredient 3</td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">View</a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a> </td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/show'}">View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/update'}">Update</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/delete'}">Delete</a> </td>
                             </tr>
                             </tbody>
                         </table>
