@@ -1,6 +1,7 @@
 package com.bishoptod3.controllers;
 
 
+import com.bishoptod3.commands.IngredientCommand;
 import com.bishoptod3.domain.Ingredient;
 import com.bishoptod3.services.IngredientService;
 import org.junit.Before;
@@ -52,6 +53,23 @@ public class IngredientControllerTest {
         //then
         Mockito.verify(ingredientService, Mockito.times(1))
                 .getIngredientsByRecipeId(Mockito.anyLong());
+    }
+
+    @Test
+    public void showIngredientTest() throws Exception {
+        //given
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( ingredientController ).build();
+        IngredientCommand command = new IngredientCommand();
+
+        //when
+        Mockito.when( ingredientService.findByRecipeIdAndIngredientId( Mockito.anyLong(), Mockito.anyLong() ))
+                .thenReturn( command );
+
+        //then
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/1/ingredient/1/show" ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.view().name( "recipe/ingredient/show" ) )
+                .andExpect( MockMvcResultMatchers.model().attributeExists( "ingredient" ) );
     }
 
 }

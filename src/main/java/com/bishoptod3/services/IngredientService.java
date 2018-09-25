@@ -1,5 +1,6 @@
 package com.bishoptod3.services;
 
+import com.bishoptod3.commands.IngredientCommand;
 import com.bishoptod3.domain.Ingredient;
 
 import java.util.Set;
@@ -10,4 +11,5 @@ import java.util.Set;
 public interface IngredientService {
 
     Set<Ingredient> getIngredientsByRecipeId(Long id);
+    IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
 }

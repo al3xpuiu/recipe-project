@@ -1,8 +1,12 @@
 package com.bishoptod3.services;
 
+import com.bishoptod3.commands.IngredientCommand;
+import com.bishoptod3.converters.IngredientToIngredientCommand;
+import com.bishoptod3.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.bishoptod3.domain.Ingredient;
 import com.bishoptod3.domain.Recipe;
 import com.bishoptod3.repositories.IngredientRepository;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,17 +22,26 @@ import java.util.Set;
 public class IngredientServiceImplTest {
 
     private IngredientServiceImpl ingredientService;
+    private IngredientToIngredientCommand ingredientToIngredientCommand;
+
+    private static final Long INGREDIENT_ID_1 = 1L;
+    private static final Long INGREDIENT_ID_2 = 2L;
 
     private static final Long RECIPE_ID=1L;
 
     @Mock
     private IngredientRepository ingredientRepository;
 
+    @Mock
+    private UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        ingredientService = new IngredientServiceImpl(ingredientRepository);
+        ingredientToIngredientCommand = new IngredientToIngredientCommand( unitOfMeasureToUnitOfMeasureCommand );
+        ingredientService = new IngredientServiceImpl(ingredientRepository, ingredientToIngredientCommand );
+
     }
 
     @Test
@@ -41,6 +54,7 @@ public class IngredientServiceImplTest {
         Set<Ingredient> ingredients = new HashSet<>();
         Ingredient ingredient = new Ingredient();
         ingredient.setRecipe(recipe);
+        ingredient.setDescription( "Some des" );
         ingredients.add(ingredient);
 
         ingredient = new Ingredient();
@@ -54,7 +68,31 @@ public class IngredientServiceImplTest {
         //then
         Mockito.verify(ingredientRepository,
                 Mockito.times(1)).findAllByRecipeId(Mockito.anyLong());
+        Assert.assertEquals(2, ingredientSet.size());
+    }
 
+    @Test
+    public void findByRecipeIdAndIngredientId() throws Exception {
+        //given
+        Set<Ingredient> ingredients = new HashSet<>();
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId( INGREDIENT_ID_1 );
+        ingredients.add(ingredient);
+        ingredient = new Ingredient();
+        ingredient.setId( INGREDIENT_ID_2 );
+        ingredients.add(ingredient);
+
+        Mockito.when(ingredientRepository.findAllByRecipeId(Mockito.anyLong())).thenReturn(ingredients);
+
+        //when
+        IngredientCommand command = ingredientService.findByRecipeIdAndIngredientId( RECIPE_ID, INGREDIENT_ID_2 );
+
+        //then
+        Mockito.verify( ingredientRepository, Mockito.times( 1 ) )
+                .findAllByRecipeId( Mockito.anyLong() );
+
+        Assert.assertNotNull( command );
+        Assert.assertEquals( INGREDIENT_ID_2, command.getId() );
     }
 
 }

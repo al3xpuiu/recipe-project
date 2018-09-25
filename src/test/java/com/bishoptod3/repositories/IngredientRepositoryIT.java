@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -19,23 +19,37 @@ import java.util.Set;
 public class IngredientRepositoryIT {
 
     private static final Long RECIPE_ID = 1L;
+    private static final Long INGREDIENT_ID = 1L;
 
     @Autowired
     private IngredientRepository ingredientRepository;
 
     @Test
-    @Transactional
     public void findAllByRecipeIdTest() {
 
         //given
-        Set<Ingredient> ingredients = ingredientRepository.findAllByRecipeId(RECIPE_ID);
 
         //when
+        Set<Ingredient> ingredients = ingredientRepository.findAllByRecipeId(RECIPE_ID);
 
         //then
         Assert.assertNotNull(ingredients);
         Assert.assertEquals(5, ingredients.size());
 
+    }
 
+    @Test
+    public void findByRecipeIdAndIdTest() {
+
+        //given
+
+        //when
+        Optional<Ingredient> ingredientOptional = ingredientRepository.findByRecipeIdAndId( RECIPE_ID, INGREDIENT_ID );
+        Ingredient ingredient = ingredientOptional.orElse( null );
+
+        //then
+        Assert.assertNotNull( ingredient );
+        Assert.assertEquals( RECIPE_ID, ingredient.getRecipe().getId() );
+        Assert.assertEquals( INGREDIENT_ID, ingredient.getId() );
     }
 }
