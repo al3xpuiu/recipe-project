@@ -59,8 +59,8 @@
                             <tr th:each="ingredient : ${ingredients}">
                                 <td th:text="${ingredient.id}">8</td>
                                 <td th:text="${ingredient.description}">Ingredient 3</td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/ingredient/' + ${ingredient.id}}">View</a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/update'}">Update</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/ingredient/' + ${ingredient.id} + '/show'}">View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/ingredient/' + ${ingredient.id} + '/update'}">Update</a></td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/delete'}">Delete</a> </td>
                             </tr>
                             </tbody>

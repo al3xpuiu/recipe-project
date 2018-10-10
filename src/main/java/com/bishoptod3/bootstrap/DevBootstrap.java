@@ -98,13 +98,13 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         ingredient = new Ingredient("Kosher salt", new BigDecimal( 1/2 ), teaspoon);
         perfectGuacamole.addIngredient( ingredient );
 
-        ingredient = new Ingredient("fresh lime juice or lemon juice", new BigDecimal( 1 ), tablespoon);
+        ingredient = new Ingredient("fresh lime juice or lemon juice", new BigDecimal( 1 ), cup);
         perfectGuacamole.addIngredient( ingredient );
 
         ingredient = new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal( 2 ), tablespoon);
         perfectGuacamole.addIngredient( ingredient );
 
-        ingredient = new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal( 2 ), each);
+        ingredient = new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal( 2 ), pinch);
         perfectGuacamole.addIngredient( ingredient );
         //Ingredients - end
 

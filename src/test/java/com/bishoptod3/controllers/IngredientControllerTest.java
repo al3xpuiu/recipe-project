@@ -2,8 +2,10 @@ package com.bishoptod3.controllers;
 
 
 import com.bishoptod3.commands.IngredientCommand;
+import com.bishoptod3.commands.UnitOfMeasureCommand;
 import com.bishoptod3.domain.Ingredient;
 import com.bishoptod3.services.IngredientService;
+import com.bishoptod3.services.UnitOfMeasureService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,10 +29,13 @@ public class IngredientControllerTest {
     @Mock
     private IngredientService ingredientService;
 
+    @Mock
+    private UnitOfMeasureService unitOfMeasureService;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        ingredientController = new IngredientController(ingredientService);
+        ingredientController = new IngredientController(ingredientService, unitOfMeasureService );
     }
 
     @Test
@@ -70,6 +75,29 @@ public class IngredientControllerTest {
                 .andExpect( MockMvcResultMatchers.status().isOk() )
                 .andExpect( MockMvcResultMatchers.view().name( "recipe/ingredient/show" ) )
                 .andExpect( MockMvcResultMatchers.model().attributeExists( "ingredient" ) );
+    }
+
+    @Test
+    public void updateRecipeIngredientViewTest() throws Exception {
+        //given
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( ingredientController ).build();
+        IngredientCommand command = new IngredientCommand();
+        Set<UnitOfMeasureCommand> unitOfMeasureCommands = new HashSet<>(  );
+        UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+        unitOfMeasureCommands.add( unitOfMeasureCommand );
+
+        //when
+        Mockito.when( ingredientService.findByRecipeIdAndIngredientId( Mockito.anyLong(), Mockito.anyLong() ))
+                .thenReturn( command );
+        Mockito.when( unitOfMeasureService.findAllAndConvertToCommand() ).thenReturn( unitOfMeasureCommands );
+
+        //then
+
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/1/ingredient/1/update" ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.view().name( "recipe/ingredient/ingredientForm" ) )
+                .andExpect( MockMvcResultMatchers.model().attributeExists( "ingredient" ) )
+                .andExpect( MockMvcResultMatchers.model().attributeExists( "uomList" ) );
     }
 
 }

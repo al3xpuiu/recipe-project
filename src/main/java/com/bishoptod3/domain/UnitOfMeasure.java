@@ -1,16 +1,17 @@
 package com.bishoptod3.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by Loky on 22/08/2018.
  */
 @Data
+@EqualsAndHashCode(exclude = "ingredient")
+@ToString(exclude = "ingredient")
 @Entity
 public class UnitOfMeasure {
 
@@ -20,4 +21,6 @@ public class UnitOfMeasure {
 
     private String description;
 
+    @OneToOne(mappedBy = "uom")
+    private Ingredient ingredient;
 }
