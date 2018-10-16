@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Loky on 22/08/2018.
@@ -21,6 +23,6 @@ public class UnitOfMeasure {
 
     private String description;
 
-    @OneToOne(mappedBy = "uom")
-    private Ingredient ingredient;
+    @OneToMany(mappedBy = "uom")
+    private Set<Ingredient> ingredient = new HashSet<>(  );
 }
