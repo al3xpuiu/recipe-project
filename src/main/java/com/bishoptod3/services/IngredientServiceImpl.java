@@ -78,24 +78,54 @@ public class IngredientServiceImpl implements IngredientService {
         if (detachedIngredient == null)
             throw new IllegalArgumentException( "detachedIngredient can't be null" );
 
-        Optional<Ingredient> ingredientOptional = ingredientRepository.findById( command.getId() );
-        Ingredient savedIngredient;
+        Optional<Ingredient> ingredientFromRepository = Optional.empty();
+        if (command.getId() != null)
+            ingredientFromRepository = ingredientRepository.findById( command.getId() );
 
-        if (ingredientOptional.isPresent()) {
-            Ingredient ingredientToEdit = ingredientOptional.get();
-            ingredientToEdit.setAmount( detachedIngredient.getAmount() );
-            ingredientToEdit.setDescription( detachedIngredient.getDescription() );
-            ingredientToEdit.setUom( detachedIngredient.getUom() );
-            savedIngredient = ingredientRepository.save( ingredientToEdit );
-        } else {
-            Optional<Recipe> recipeOptional = recipeRepository.findById( command.getRecipeId() );
-            Recipe recipeToBeModified = recipeOptional.orElseThrow( () -> new IllegalArgumentException
-                    ( "Can't find any recipe with the id " + command.getRecipeId() ) );
-            savedIngredient = detachedIngredient;
-            recipeToBeModified.addIngredient( savedIngredient );
-            recipeRepository.save( recipeToBeModified );
+        Ingredient savedOrUpdatedIngredient;
+
+        if (ingredientFromRepository.isPresent())
+            savedOrUpdatedIngredient = updateAndGetIngredientFromRepository( ingredientFromRepository.get(), detachedIngredient );
+        else {
+            savedOrUpdatedIngredient = saveAndGetIngredientForRecipe( command.getRecipeId(), detachedIngredient );
         }
 
-        return ingredientToIngredientCommand.convert( savedIngredient );
+        return ingredientToIngredientCommand.convert( savedOrUpdatedIngredient );
     }
+
+    @Transactional
+    private Ingredient updateAndGetIngredientFromRepository(Ingredient ingredientToUpdate, Ingredient ingredientFromForm) {
+
+        ingredientToUpdate.setAmount( ingredientFromForm.getAmount() );
+        ingredientToUpdate.setDescription( ingredientFromForm.getDescription() );
+        ingredientToUpdate.setUom( ingredientFromForm.getUom() );
+
+        return ingredientRepository.save( ingredientToUpdate );
+
+    }
+
+    @Transactional
+    private Ingredient saveAndGetIngredientForRecipe(Long recipeId, Ingredient ingredientFromForm) {
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById( recipeId );
+        Recipe recipeToBeModified = recipeOptional.orElseThrow( () -> new IllegalArgumentException
+                ( "Can't find any recipe with the id " + recipeId ) );
+        ingredientFromForm.setRecipe( recipeToBeModified );
+        recipeToBeModified.addIngredient( ingredientFromForm );
+        Recipe savedRecipe = recipeRepository.save( recipeToBeModified );
+
+        return getSavedIngredient(savedRecipe, ingredientFromForm);
+    }
+
+    @Transactional
+    private Ingredient getSavedIngredient(Recipe savedRecipe, Ingredient savedIngredient) {
+        log.debug( "I'm in getSavedIngredient(). " );
+        return savedRecipe.getIngredients()
+                .stream()
+                .filter( i -> i.getAmount().equals( savedIngredient.getAmount() ) )
+                .filter( i -> i.getDescription().equals( savedIngredient.getDescription() ) )
+                .filter( i -> i.getUom().getId().equals( savedIngredient.getUom().getId()) )
+                .findFirst().orElseThrow( () -> new IllegalArgumentException( "The value can't be null" ) );
+    }
+
 }

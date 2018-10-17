@@ -1,6 +1,7 @@
 package com.bishoptod3.controllers;
 
 import com.bishoptod3.commands.IngredientCommand;
+import com.bishoptod3.commands.UnitOfMeasureCommand;
 import com.bishoptod3.services.IngredientService;
 import com.bishoptod3.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class IngredientController {
         log.debug("Getting ingredient list for recipe id: " + recipeId);
 
         model.addAttribute("ingredients", ingredientService.getIngredientsByRecipeId(Long.valueOf(recipeId)));
-
+        model.addAttribute( "recipeId", recipeId );
         return "recipe/ingredient/list";
     }
 
@@ -48,6 +49,7 @@ public class IngredientController {
         return "recipe/ingredient/show";
     }
 
+    @GetMapping
     @RequestMapping("/recipe/{recipeId}/ingredient/{id}/update")
     public String updateRecipeIngredientView(@PathVariable String recipeId, @PathVariable String id, Model model) {
 
@@ -64,9 +66,22 @@ public class IngredientController {
     public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
 
         log.debug( "Initiating method: ingredientService.saveIngredient(command), in IngredientController" );
-        ingredientService.saveIngredient( command );
-        return "redirect:/recipe/" +command.getRecipeId() + "/ingredient/" + command.getId() + "/show";
+        IngredientCommand savedCommand = ingredientService.saveIngredient( command );
+
+        return "redirect:/recipe/" +savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
     }
 
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model) {
 
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setUom( new UnitOfMeasureCommand() );
+        ingredientCommand.setRecipeId( Long.valueOf( recipeId ));
+        model.addAttribute( "ingredient", ingredientCommand);
+
+        model.addAttribute( "uomList", unitOfMeasureService.findAllAndConvertToCommand() );
+
+        return "recipe/ingredient/ingredientForm";
+    }
 }

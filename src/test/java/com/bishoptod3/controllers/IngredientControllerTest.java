@@ -100,4 +100,17 @@ public class IngredientControllerTest {
                 .andExpect( MockMvcResultMatchers.model().attributeExists( "uomList" ) );
     }
 
+    @Test
+    public void newRecipeIngredientViewTest() throws Exception {
+        //given
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( ingredientController ).build();
+
+        //when
+
+        //then
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/1/ingredient/new" ) )
+                .andExpect(MockMvcResultMatchers.model().attributeExists( "ingredient" ) )
+                .andExpect( MockMvcResultMatchers.view().name( "recipe/ingredient/ingredientForm" ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() );
+    }
 }
