@@ -108,4 +108,14 @@ public class IngredientServiceImplTest {
         Assert.assertEquals( INGREDIENT_ID_2, command.getId() );
     }
 
+    @Test
+    public void deleteByIdTest() throws Exception {
+
+        //when
+        ingredientService.deleteById(INGREDIENT_ID_1);
+
+        //then
+        Mockito.verify(ingredientRepository, Mockito.times( 1 )).deleteById( Mockito.anyLong() );
+
+    }
 }

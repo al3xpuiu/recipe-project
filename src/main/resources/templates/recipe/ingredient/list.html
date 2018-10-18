@@ -69,7 +69,7 @@
                                 <td th:text="${ingredient.description}">Ingredient 3</td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/ingredient/' + ${ingredient.id} + '/show'}">View</a></td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/ingredient/' + ${ingredient.id} + '/update'}">Update</a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/delete'}">Delete</a> </td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${ingredient.recipe.id} + '/ingredient/' + ${ingredient.id} + '/delete'}">Delete</a> </td>
                             </tr>
                             </tbody>
                         </table>

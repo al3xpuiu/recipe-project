@@ -113,4 +113,17 @@ public class IngredientControllerTest {
                 .andExpect( MockMvcResultMatchers.view().name( "recipe/ingredient/ingredientForm" ) )
                 .andExpect( MockMvcResultMatchers.status().isOk() );
     }
+
+    @Test
+    public void deleteIngredientByIdTest() throws Exception {
+        //given
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( ingredientController ).build();
+
+        //then
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/1/ingredient/1/delete" ) )
+                .andExpect( MockMvcResultMatchers.status().is3xxRedirection() )
+                .andExpect( MockMvcResultMatchers.view().name( "redirect:/recipe/1/ingredients" ) );
+
+        Mockito.verify( ingredientService, Mockito.times( 1 ) ).deleteById( Mockito.anyLong() );
+    }
 }
