@@ -62,7 +62,6 @@ public class IngredientServiceImpl implements IngredientService {
                 .findFirst()
                 .orElseThrow( () -> new IllegalArgumentException( "There was no ingredient with the id "  + ingredientId) );
 
-
         return ingredientToIngredientCommand.convert( ingredient );
     }
 
@@ -72,7 +71,6 @@ public class IngredientServiceImpl implements IngredientService {
 
         Ingredient ingredientFromWebsite = validateAndConvertCommandToIngredient( command );
         Optional<Ingredient> ingredientOptionalFromRepository = findIngredientOptionalByCommandId( command.getId() );
-
         Ingredient ingredientSavedOrUpdated;
         if (ingredientOptionalFromRepository.isPresent()) {
             Ingredient ingredientToUpdate = ingredientOptionalFromRepository.get();
@@ -80,7 +78,6 @@ public class IngredientServiceImpl implements IngredientService {
         } else {
             ingredientSavedOrUpdated = saveIngredientForRecipe( command.getRecipeId(), ingredientFromWebsite );
         }
-
         return ingredientToIngredientCommand.convert( ingredientSavedOrUpdated );
     }
 
@@ -88,12 +85,9 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (command == null)
             throw new IllegalArgumentException( "IngredientCommand can't be null" );
-
         Ingredient ingredientFromForm = ingredientCommandToIngredient.convert( command );
-
         if (ingredientFromForm == null)
             throw new IllegalArgumentException( "ingredientFromForm can't be null" );
-
         return ingredientFromForm;
     }
 
@@ -102,7 +96,6 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Ingredient> ingredientOptionalFromRepository = Optional.empty();
         if (id != null)
             ingredientOptionalFromRepository = ingredientRepository.findById( id );
-
         return ingredientOptionalFromRepository;
     }
 

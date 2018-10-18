@@ -6,7 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * Created by Loky on 12/09/2018.
@@ -22,8 +25,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    @RequestMapping({"/recipe/{id}/show"})
+    @GetMapping("/recipe/{id}/show")
     public String getRecipe(Model model, @PathVariable String id) {
 
         model.addAttribute("recipe", recipeService.findById(new Long(id)));
@@ -31,16 +33,14 @@ public class RecipeController {
         return "recipe/show";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/new")
+    @GetMapping("/recipe/new")
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
 
         return "recipe/recipeForm";
     }
 
-    @PostMapping
-    @RequestMapping("recipe")
+    @PostMapping("recipe")
     public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
 
         RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(command);
@@ -48,8 +48,7 @@ public class RecipeController {
         return "redirect:/recipe/" + savedRecipeCommand.getId() + "/show";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/update")
+    @GetMapping("/recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
 
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
@@ -57,8 +56,7 @@ public class RecipeController {
         return "recipe/recipeForm";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/delete")
+    @GetMapping("/recipe/{id}/delete")
     public String delete(@PathVariable String id) {
 
         log.debug("Deleting " + id);
