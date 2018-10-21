@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,5 +84,42 @@ public class RecipeServiceImpl implements RecipeService {
         if (id == null) throw new IllegalArgumentException("Id can't be null");
         recipeRepository.deleteById(id);
 
+    }
+
+    @Override
+    @Transactional
+    public Byte[] saveRecipeImage(Long recipeId, MultipartFile multipartFile) {
+
+        log.debug( "In RecipeService. Saving image on recipe with id " + recipeId );
+
+        Recipe recipeToBeModified = getRecipeFromRepository( recipeId );
+        Byte[] image = getImageAsByteArrayFromMultipartfile( multipartFile );
+        recipeToBeModified.setImage( image );
+        recipeRepository.save( recipeToBeModified );
+
+        return image;
+    }
+
+    private Recipe getRecipeFromRepository(Long recipeId) {
+        return recipeRepository.findById( recipeId )
+                .orElseThrow( () -> new IllegalArgumentException( "Recipe with id " + recipeId + " was not found" ) );
+    }
+
+    private Byte[] getImageAsByteArrayFromMultipartfile(MultipartFile multipartFile) {
+
+        Byte[] image = null;
+        try {
+            byte[] multipartFileBytes = multipartFile.getBytes();
+            int length = multipartFileBytes.length;
+            log.debug( "Byte length in multipartFile: " + length );
+            image = new Byte[length];
+            for(int i=0; i<length; i++) {
+                image[i] = multipartFileBytes[i];
+            }
+            log.debug( "Byte length in image after copy: " + image.length );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 }

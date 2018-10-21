@@ -46,7 +46,6 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional
     public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
-
         if (recipeId == null)
             throw new IllegalArgumentException( "RecipeId can't be null" );
 
@@ -68,7 +67,6 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional
     public IngredientCommand saveIngredient(IngredientCommand command) {
-
         Ingredient ingredientFromWebsite = validateAndConvertCommandToIngredient( command );
         Optional<Ingredient> ingredientOptionalFromRepository = findIngredientOptionalByCommandId( command.getId() );
         Ingredient ingredientSavedOrUpdated;
@@ -82,7 +80,6 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     private Ingredient validateAndConvertCommandToIngredient(IngredientCommand command) {
-
         if (command == null)
             throw new IllegalArgumentException( "IngredientCommand can't be null" );
         Ingredient ingredientFromForm = ingredientCommandToIngredient.convert( command );
@@ -92,7 +89,6 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     private Optional<Ingredient> findIngredientOptionalByCommandId(Long id) {
-
         Optional<Ingredient> ingredientOptionalFromRepository = Optional.empty();
         if (id != null)
             ingredientOptionalFromRepository = ingredientRepository.findById( id );
@@ -101,26 +97,26 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Transactional
     private Ingredient updateIngredientFromRepository(Ingredient ingredientToUpdate, Ingredient ingredientFromForm) {
-
         ingredientToUpdate.setAmount( ingredientFromForm.getAmount() );
         ingredientToUpdate.setDescription( ingredientFromForm.getDescription() );
         ingredientToUpdate.setUom( ingredientFromForm.getUom() );
-
         return ingredientRepository.save( ingredientToUpdate );
 
     }
 
     @Transactional
     private Ingredient saveIngredientForRecipe(Long recipeId, Ingredient ingredientFromForm) {
-
-        Optional<Recipe> recipeOptional = recipeRepository.findById( recipeId );
-        Recipe recipeToBeModified = recipeOptional.orElseThrow( () -> new IllegalArgumentException
-                ( "Can't find any recipe with the id " + recipeId ) );
+        Recipe recipeToBeModified = getRecipeThatNeedsToBeModified( recipeId );
         ingredientFromForm.setRecipe( recipeToBeModified );
         recipeToBeModified.addIngredient( ingredientFromForm );
         Recipe savedRecipe = recipeRepository.save( recipeToBeModified );
-
         return getSavedIngredient(savedRecipe, ingredientFromForm);
+    }
+
+    private Recipe getRecipeThatNeedsToBeModified(Long recipeId) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById( recipeId );
+        return recipeOptional.orElseThrow( () -> new IllegalArgumentException
+                ( "Can't find any recipe with the id " + recipeId ) );
     }
 
     @Transactional
@@ -131,12 +127,12 @@ public class IngredientServiceImpl implements IngredientService {
                 .filter( i -> i.getAmount().equals( savedIngredient.getAmount() ) )
                 .filter( i -> i.getDescription().equals( savedIngredient.getDescription() ) )
                 .filter( i -> i.getUom().getId().equals( savedIngredient.getUom().getId()) )
-                .findFirst().orElseThrow( () -> new IllegalArgumentException( "The value can't be null" ) );
+                .findFirst().orElseThrow( () -> new IllegalArgumentException( "The value can't be found" ) );
     }
 
     @Override
     public void deleteById(Long id) {
-        log.debug( "I'm trying to delete ingredient with the id: " + id );
+        log.debug( "I'm trying to deleteRecipe ingredient with the id: " + id );
         ingredientRepository.deleteById( id );
     }
 }

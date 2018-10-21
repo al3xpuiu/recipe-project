@@ -6,9 +6,12 @@ import com.bishoptod3.domain.Recipe;
 import com.bishoptod3.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -76,7 +79,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void testDeleteById() throws Exception {
+    public void deleteByIdTest() throws Exception {
 
         //given
         Long idToDelete = 1L;
@@ -86,6 +89,27 @@ public class RecipeServiceImplTest {
 
         //then
         Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+    }
+
+    @Test
+    public void saveRecipeImageTest() throws Exception {
+        //given
+        Long id = 1L;
+        Recipe recipe = new Recipe(  );
+        recipe.setId(id );
+        MultipartFile multipartFile = new MockMultipartFile("imagefile",
+                "testing.txt", "text/plain", "RecipeProject".getBytes());
+        Mockito.when( recipeRepository.findById( Mockito.anyLong() ) ).thenReturn( Optional.of( recipe ) );
+        ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass( Recipe.class );
+
+        //when
+        recipeService.saveRecipeImage( id, multipartFile );
+
+        //then
+        Mockito.verify( recipeRepository, Mockito.times( 1 ) ).save( argumentCaptor.capture() );
+        Recipe savedRecipe = argumentCaptor.getValue();
+        assertEquals( multipartFile.getBytes().length, savedRecipe.getImage().length );
+
     }
 
 }

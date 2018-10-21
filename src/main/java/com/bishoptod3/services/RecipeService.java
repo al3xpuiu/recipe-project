@@ -2,6 +2,7 @@ package com.bishoptod3.services;
 
 import com.bishoptod3.commands.RecipeCommand;
 import com.bishoptod3.domain.Recipe;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -19,4 +20,6 @@ public interface RecipeService {
     RecipeCommand findCommandById(Long id);
 
     void deleteById(Long id);
+
+    Byte[] saveRecipeImage(Long recipeId, MultipartFile multipartFile);
 }

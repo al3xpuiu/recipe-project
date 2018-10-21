@@ -3,12 +3,15 @@ package com.bishoptod3.controllers;
 import com.bishoptod3.commands.RecipeCommand;
 import com.bishoptod3.domain.Recipe;
 import com.bishoptod3.services.RecipeService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -105,6 +108,72 @@ public class RecipeControllerTest {
         Mockito.verify(recipeService, Mockito.times(1)).deleteById(Mockito.anyLong());
 
     }
+
+    @Test
+    public void getImageFormViewTest() throws Exception {
+        //given
+        RecipeCommand recipe = new RecipeCommand(  );
+        recipe.setId( 1L );
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
+
+        //when
+        Mockito.when( recipeService.findCommandById( Mockito.anyLong() ) ).thenReturn( recipe );
+
+        //then
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/1/image/change" ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.model().attributeExists( "recipe" ) );
+        Mockito.verify( recipeService, Mockito.times( 1 ) ).findCommandById( Mockito.anyLong() );
+    }
+
+    @Test
+    public void handleImagePostTest() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imagefile", "testing.txt",
+                "text/plain", "RecipeProject".getBytes());
+
+        mockMvc.perform( MockMvcRequestBuilders.multipart( "/recipe/1/image" ).file( mockMultipartFile ) )
+                .andExpect( MockMvcResultMatchers.status().is3xxRedirection() )
+                .andExpect( MockMvcResultMatchers.header().string( "Location", "/recipe/1/show" ) );
+
+        Mockito.verify( recipeService, Mockito.times( 1 ) )
+                .saveRecipeImage( Mockito.anyLong(), Mockito.any() );
+    }
+
+    @Test
+    public void renderImageFromDbTest() throws Exception {
+        //given
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
+        RecipeCommand command = new RecipeCommand();
+        command.setId( 1L );
+
+        String s = "Some fake image text";
+        Byte[] imageInBytes = new Byte[s.getBytes().length];
+        int i=0;
+
+        for (byte b : s.getBytes()) {
+            imageInBytes[i++] = b;
+        }
+        command.setImage( imageInBytes );
+
+        //when
+        Mockito.when( recipeService.findCommandById( Mockito.anyLong()) ).thenReturn( command );
+
+        //then
+        MockHttpServletResponse response = mockMvc
+                .perform( MockMvcRequestBuilders.get( "/recipe/1/recipeImage" ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andReturn().getResponse();
+
+        byte[] responseBytes = response.getContentAsByteArray();
+
+        Assert.assertEquals(s.getBytes().length, responseBytes.length);
+
+
+    }
+
+
 
 
 
