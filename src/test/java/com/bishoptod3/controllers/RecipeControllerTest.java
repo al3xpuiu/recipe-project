@@ -2,6 +2,7 @@ package com.bishoptod3.controllers;
 
 import com.bishoptod3.commands.RecipeCommand;
 import com.bishoptod3.domain.Recipe;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.services.RecipeService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -170,7 +171,18 @@ public class RecipeControllerTest {
 
         Assert.assertEquals(s.getBytes().length, responseBytes.length);
 
+    }
 
+    @Test
+    public void getRecipeNotFoundTest() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
+        //given
+        Mockito.when( recipeService.findById( Mockito.anyLong() ) ).thenThrow( NotFoundException.class );
+
+        //then
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/2/show" ) )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
     }
 
 

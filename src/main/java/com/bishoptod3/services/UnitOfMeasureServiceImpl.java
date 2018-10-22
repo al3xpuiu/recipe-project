@@ -3,6 +3,7 @@ package com.bishoptod3.services;
 import com.bishoptod3.commands.UnitOfMeasureCommand;
 import com.bishoptod3.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.bishoptod3.domain.UnitOfMeasure;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 
         log.debug( "Searching for UnitOfMeasure by Ingredient Id: " + id );
         return unitOfMeasureRepository.findByIngredientId( id )
-                .orElseThrow( () -> new IllegalArgumentException( "Can't find a unit of measure obj belonging to" +
+                .orElseThrow( () -> new NotFoundException( "Can't find a unit of measure obj belonging to" +
                         " and ingredient obj with the id: " + id ) );
     }
 

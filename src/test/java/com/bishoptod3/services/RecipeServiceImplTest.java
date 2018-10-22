@@ -3,6 +3,7 @@ package com.bishoptod3.services;
 import com.bishoptod3.converters.RecipeCommandToRecipe;
 import com.bishoptod3.converters.RecipeToRecipeCommand;
 import com.bishoptod3.domain.Recipe;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,6 +110,19 @@ public class RecipeServiceImplTest {
         Mockito.verify( recipeRepository, Mockito.times( 1 ) ).save( argumentCaptor.capture() );
         Recipe savedRecipe = argumentCaptor.getValue();
         assertEquals( multipartFile.getBytes().length, savedRecipe.getImage().length );
+
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void recipeNotFoundTest() {
+
+        //given
+        Long recipeId = 1L;
+        Optional<Recipe> recipeOptional = Optional.empty();
+        Mockito.when( recipeRepository.findById( Mockito.anyLong() ) ).thenReturn( recipeOptional );
+
+        //then
+        recipeService.findById( recipeId );
 
     }
 

@@ -4,6 +4,7 @@ package com.bishoptod3.controllers;
 import com.bishoptod3.commands.IngredientCommand;
 import com.bishoptod3.commands.UnitOfMeasureCommand;
 import com.bishoptod3.domain.Ingredient;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.services.IngredientService;
 import com.bishoptod3.services.UnitOfMeasureService;
 import org.junit.Before;
@@ -125,5 +126,17 @@ public class IngredientControllerTest {
                 .andExpect( MockMvcResultMatchers.view().name( "redirect:/recipe/1/ingredients" ) );
 
         Mockito.verify( ingredientService, Mockito.times( 1 ) ).deleteById( Mockito.anyLong() );
+    }
+
+    @Test
+    public void  getIngredientNotFoundTest() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( ingredientController ).build();
+        Mockito.when( ingredientService.findByRecipeIdAndIngredientId( Mockito.anyLong(), Mockito.anyLong() ) )
+                .thenThrow( NotFoundException.class );
+
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/1/ingredient/1/show" ) )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
+
     }
 }

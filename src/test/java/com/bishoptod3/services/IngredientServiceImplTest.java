@@ -7,6 +7,7 @@ import com.bishoptod3.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import com.bishoptod3.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.bishoptod3.domain.Ingredient;
 import com.bishoptod3.domain.Recipe;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.repositories.IngredientRepository;
 import com.bishoptod3.repositories.RecipeRepository;
 import org.junit.Assert;
@@ -117,5 +118,24 @@ public class IngredientServiceImplTest {
         //then
         Mockito.verify(ingredientRepository, Mockito.times( 1 )).deleteById( Mockito.anyLong() );
 
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void ingredientNotFoundTest() {
+
+        //given
+        Set<Ingredient> ingredients = new HashSet<>(  );
+        Ingredient ingredient = new Ingredient(  );
+        ingredient.setId( INGREDIENT_ID_1 );
+        ingredients.add( ingredient );
+        ingredient = new Ingredient(  );
+        ingredient.setId( INGREDIENT_ID_2 );
+        ingredients.add( ingredient );
+        Mockito.when( ingredientRepository.findAllByRecipeId( Mockito.anyLong() ) ).thenReturn( ingredients );
+
+        Long idShouldNotBeFound = 3L;
+
+        //when
+        ingredientService.findByRecipeIdAndIngredientId( Mockito.anyLong(), idShouldNotBeFound );
     }
 }

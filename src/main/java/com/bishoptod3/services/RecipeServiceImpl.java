@@ -4,6 +4,7 @@ import com.bishoptod3.commands.RecipeCommand;
 import com.bishoptod3.converters.RecipeCommandToRecipe;
 import com.bishoptod3.converters.RecipeToRecipeCommand;
 import com.bishoptod3.domain.Recipe;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe findById(Long id) {
         Recipe recipe = recipeRepository.findById( id ).orElse( null );
-        if (recipe == null) throw new IllegalArgumentException( "There is no recipe with id: " + id );
+        if (recipe == null) throw new NotFoundException( "There is no recipe with id: " + id );
 
         return recipe;
     }
@@ -73,7 +74,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeCommand findCommandById(Long id) {
 
         Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe == null) throw new IllegalArgumentException("There is not recipe with the id " + id);
+        if (recipe == null) throw new NotFoundException("There is not recipe with the id " + id);
 
         return recipeToRecipeCommand.convert(recipe);
     }
@@ -102,7 +103,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     private Recipe getRecipeFromRepository(Long recipeId) {
         return recipeRepository.findById( recipeId )
-                .orElseThrow( () -> new IllegalArgumentException( "Recipe with id " + recipeId + " was not found" ) );
+                .orElseThrow( () -> new NotFoundException( "Recipe with id " + recipeId + " was not found" ) );
     }
 
     private Byte[] getImageAsByteArrayFromMultipartfile(MultipartFile multipartFile) {

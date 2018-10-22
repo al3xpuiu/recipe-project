@@ -5,6 +5,7 @@ import com.bishoptod3.converters.IngredientCommandToIngredient;
 import com.bishoptod3.converters.IngredientToIngredientCommand;
 import com.bishoptod3.domain.Ingredient;
 import com.bishoptod3.domain.Recipe;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.repositories.IngredientRepository;
 import com.bishoptod3.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient ingredient = ingredients.stream()
                 .filter( i -> i.getId().equals( ingredientId ))
                 .findFirst()
-                .orElseThrow( () -> new IllegalArgumentException( "There was no ingredient with the id "  + ingredientId) );
+                .orElseThrow( () -> new NotFoundException( "There was no ingredient with the id "  + ingredientId) );
 
         return ingredientToIngredientCommand.convert( ingredient );
     }
@@ -92,6 +93,8 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Ingredient> ingredientOptionalFromRepository = Optional.empty();
         if (id != null)
             ingredientOptionalFromRepository = ingredientRepository.findById( id );
+        if (!ingredientOptionalFromRepository.isPresent())
+            throw new NotFoundException( "Ingredient with id " + id + " not found");
         return ingredientOptionalFromRepository;
     }
 
@@ -127,7 +130,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .filter( i -> i.getAmount().equals( savedIngredient.getAmount() ) )
                 .filter( i -> i.getDescription().equals( savedIngredient.getDescription() ) )
                 .filter( i -> i.getUom().getId().equals( savedIngredient.getUom().getId()) )
-                .findFirst().orElseThrow( () -> new IllegalArgumentException( "The value can't be found" ) );
+                .findFirst().orElseThrow( () -> new NotFoundException( "The value can't be found" ) );
     }
 
     @Override
