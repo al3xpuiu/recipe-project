@@ -182,7 +182,8 @@ public class RecipeControllerTest {
 
         //then
         mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/2/show" ) )
-                .andExpect( MockMvcResultMatchers.status().isNotFound() );
+                .andExpect( MockMvcResultMatchers.status().isNotFound() )
+                .andExpect( MockMvcResultMatchers.view().name( "404error" ) );
     }
 
 

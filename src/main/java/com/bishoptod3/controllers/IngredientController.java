@@ -2,16 +2,16 @@ package com.bishoptod3.controllers;
 
 import com.bishoptod3.commands.IngredientCommand;
 import com.bishoptod3.commands.UnitOfMeasureCommand;
+import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.services.IngredientService;
 import com.bishoptod3.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by DD on 9/24/2018.
@@ -89,6 +89,16 @@ public class IngredientController {
         ingredientService.deleteById( Long.valueOf( id ));
 
         return "redirect:/recipe/" + recipeId + "/ingredients";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView ingredientHandlerNotFound() {
+        log.error( "Handling not found exception" );
+
+        ModelAndView modelAndView = new ModelAndView(  );
+        modelAndView.setViewName( "404error" );
+        return modelAndView;
     }
 
 }
