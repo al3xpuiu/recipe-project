@@ -176,7 +176,9 @@ public class RecipeControllerTest {
     @Test
     public void getRecipeNotFoundTest() throws Exception {
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController )
+                .setControllerAdvice( new ControllerExceptionHandler() )
+                .build();
         //given
         Mockito.when( recipeService.findById( Mockito.anyLong() ) ).thenThrow( NotFoundException.class );
 
@@ -189,8 +191,10 @@ public class RecipeControllerTest {
 
     @Test
     public void numberFormatExceptionTest() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
-        
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController )
+                .setControllerAdvice( new ControllerExceptionHandler() )
+                .build();
+
         //then
         mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/fdfs/show" ) )
                 .andExpect( MockMvcResultMatchers.status().isBadRequest() )
