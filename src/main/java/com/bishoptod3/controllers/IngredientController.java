@@ -2,6 +2,7 @@ package com.bishoptod3.controllers;
 
 import com.bishoptod3.commands.IngredientCommand;
 import com.bishoptod3.commands.UnitOfMeasureCommand;
+import com.bishoptod3.controllers.factories.ModelAndViewForExceptionsFactory;
 import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.services.IngredientService;
 import com.bishoptod3.services.UnitOfMeasureService;
@@ -93,12 +94,13 @@ public class IngredientController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView ingredientHandlerNotFound() {
-        log.error( "Handling not found exception" );
-
-        ModelAndView modelAndView = new ModelAndView(  );
-        modelAndView.setViewName( "404error" );
-        return modelAndView;
+    public ModelAndView handlerNotFoundIngredient(Exception notFoundException) {
+        return ModelAndViewForExceptionsFactory.getModelAndViewForException( notFoundException );
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView numberFormatExceptionRecipe(Exception numberFormatException) {
+        return ModelAndViewForExceptionsFactory.getModelAndViewForException( numberFormatException );
+    }
 }

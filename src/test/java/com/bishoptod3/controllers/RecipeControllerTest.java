@@ -187,7 +187,14 @@ public class RecipeControllerTest {
     }
 
 
-
-
+    @Test
+    public void numberFormatExceptionTest() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( recipeController ).build();
+        
+        //then
+        mockMvc.perform( MockMvcRequestBuilders.get( "/recipe/fdfs/show" ) )
+                .andExpect( MockMvcResultMatchers.status().isBadRequest() )
+                .andExpect( MockMvcResultMatchers.view().name( "400error" ) );
+    }
 
 }

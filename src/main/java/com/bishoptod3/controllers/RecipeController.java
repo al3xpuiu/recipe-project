@@ -1,6 +1,7 @@
 package com.bishoptod3.controllers;
 
 import com.bishoptod3.commands.RecipeCommand;
+import com.bishoptod3.controllers.factories.ModelAndViewForExceptionsFactory;
 import com.bishoptod3.exceptions.NotFoundException;
 import com.bishoptod3.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -121,11 +122,13 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound() {
-        log.error( "Handling not found exception" );
+    public ModelAndView handleNotFoundRecipe(Exception notFoundException) {
+        return ModelAndViewForExceptionsFactory.getModelAndViewForException( notFoundException );
+    }
 
-        ModelAndView modelAndView = new ModelAndView(  );
-        modelAndView.setViewName( "404error" );
-        return modelAndView;
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView numberFormatExceptionRecipe(Exception numberFormatException) {
+        return ModelAndViewForExceptionsFactory.getModelAndViewForException( numberFormatException );
     }
 }
