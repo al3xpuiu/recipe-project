@@ -52,7 +52,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void saveOrUpdateTest() throws Exception {
+    public void saveOrUpdateFormTest() throws Exception {
 
         RecipeCommand command = new RecipeCommand();
         command.setId(2L);
@@ -63,11 +63,29 @@ public class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
-                .param("description", "same new description"))
+                .param("description", "same new description")
+                .param( "directions", "some directions" ))
 
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/2/show"));
 
+    }
+
+    @Test
+    public void saveOrUpdateFormValidationTest() throws Exception {
+
+        RecipeCommand command = new RecipeCommand();
+        command.setId(2L);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        Mockito.when(recipeService.saveRecipeCommand(Mockito.any())).thenReturn(command);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", ""))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect( MockMvcResultMatchers.model().attributeExists( "recipe" ) )
+                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeForm"));
 
     }
 
